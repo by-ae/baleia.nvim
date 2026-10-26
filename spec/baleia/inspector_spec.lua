@@ -59,6 +59,17 @@ describe("baleia.inspector", function()
         italic = true,
       }, style)
     end)
+
+    it("does not carry a highlight that stops before the end of the line", function()
+      -- "red" in the middle, then plain text, as after a trailing reset
+      vim.api.nvim_buf_set_extmark(buffer, namespace, 0, 0, {
+        end_col = 5,
+        hl_group = "TestHL_Red",
+      })
+
+      local style = inspector.style_at_end_of_line(buffer, namespace, 0)
+      assert.combinators.match({}, style)
+    end)
   end)
 
   describe("style_at", function()
